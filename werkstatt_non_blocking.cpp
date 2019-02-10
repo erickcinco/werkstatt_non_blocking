@@ -11,6 +11,7 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>
+#include "TimerOne.h"
 
 
 /* INTERFACE */
@@ -258,10 +259,15 @@ arpeggiator::arpeggiator(int arp_pin)
 	_pin = arp_pin;
 
 }
-void arpeggiator::play(float bpm, int note, int note_values)
+void arpeggiator::play(int note)
+{
+	analogWrite(_pin, note);
+
+};
+long arpeggiator::note_time_us(float bpm, int note_values)
 {
 	_bpm = bpm;
-	float _q = 1/_bpm*60000; //BPM to milliseconds formula, gives us our quarter note value
+	float _q = (1/_bpm) *60000000; //BPM to microseconds formula, gives us our quarter note value
 
 	//calculate note durations based on BPM
 	float _w = 4*_q; //whole notes
@@ -275,13 +281,8 @@ void arpeggiator::play(float bpm, int note, int note_values)
 	float _sxf = _q/16; //sixty-fourth notes
 
 	float _values[] = {_w, _h, _q, _qt, _e, _et, _sx, _sxt, _th, _sxf};
-
-	analogWrite(_pin, note);
-	delay(_values[note_values]);
-
+	return (long) _values[note_values]; // return necessary time interval in microseconds
 };
-
-
 
 
 

@@ -110,7 +110,8 @@ class arpeggiator
 {
 public:
 	arpeggiator(int arp_pin);
-	void play(float bpm, int note, int note_values);
+	void play(int note);
+	long note_time_us(float bpm, int note_values);
 private:
 	int _pin;
 	float _bpm;
@@ -167,8 +168,8 @@ private:
 #define major6th 45 // 9
 #define minor7th 50 // 10
 #define major7th 55 // 11
-#define octave 60 // 12
-#define octave2 120
+#define octave 60 // 0
+#define octave2 120 // 0
 
 #define w 0
 #define h 1
